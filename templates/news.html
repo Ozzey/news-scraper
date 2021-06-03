@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+    {% block content %}
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/news.css') }}">
+      <title>News</title>
+   {% endblock %}
+   {% block body %}
+  <div class="flex-container">
+
+    {% for news in news %}
+      <div class="news-card">
+        <img src="{{ news.Image }}">
+        <div class="headline">
+          {{ news.Headline }}
+        </div>
+        <div class="date">
+          {{ news.Date }}
+        </div>
+        <button data-modal-target="#{{news.ID}}">Read More</button>
+        <div class="modal" id='{{news.ID}}'>
+          <div class="modal-header">
+            <div class="title"> {{ news.Headline }} </div>
+              <button data-close-button class="close-button">&times;</button>
+          </div>
+          <div class="modal-body">
+            <p> {{ news.Article }} </p>
+          </div>
+        </div>
+        <div id="overlay"></div>
+      </div>
+        {% endfor %}
+    </div>
+  <script>
+const openModalButtons = document.querySelectorAll('[data-modal-target]')
+const closeModalButtons = document.querySelectorAll('[data-close-button]')
+const overlay = document.getElementById('overlay')
+
+openModalButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const modal = document.querySelector(button.dataset.modalTarget)
+    openModal(modal)
+  })
+})
+
+overlay.addEventListener('click', () => {
+  const modal = document.querySelectorAll('.modal.active')
+  modals.forEach(modal => {
+    closeModal(modal})
+  })
+})
+
+closeModalButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const modal = button.closest('.modal')
+    closeModal(modal)
+  })
+})
+
+function openModal(modal) {
+  if (modal == null) return
+  modal.classList.add('active')
+  overlay.classList.add('active')
+}
+
+function closeModal(modal) {
+  if (modal == null) return
+  modal.classList.remove('active')
+  overlay.classList.remove('active')
+}
+
+  </script>
+  {% endblock %}
